@@ -10,6 +10,9 @@ if(DEFINED XP_NAMESPACE)
   set(XP_OPT_INSTALL EXCLUDE_FROM_ALL)
   set(nameSpace NAMESPACE ${XP_NAMESPACE}::)
 endif()
+if(NOT DEFINED XP_INSTALL_CMAKEDIR)
+  set(XP_INSTALL_CMAKEDIR ${CMAKE_INSTALL_DATADIR}/cmake)
+endif()
 set(PACKAGE_BUGREPORT "expat-bugs@libexpat.org")
 set(PACKAGE_NAME "expat")
 set(PACKAGE_VERSION "2.2.5")
@@ -145,7 +148,7 @@ set(targetsFile ${PROJECT_NAME}-targets)
 expat_install(TARGETS expat EXPORT ${targetsFile} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
                       LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
                       ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
-expat_install(EXPORT ${targetsFile} DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake ${nameSpace})
+expat_install(EXPORT ${targetsFile} DESTINATION ${XP_INSTALL_CMAKEDIR} ${nameSpace})
 
 set(prefix ${CMAKE_INSTALL_PREFIX})
 set(exec_prefix "\${prefix}/bin")
