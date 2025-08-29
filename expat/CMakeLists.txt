@@ -1,11 +1,11 @@
 # This file is copyrighted under the BSD-license for buildsystem files of KDE
 # copyright 2010, Patrick Spendrin <ps_ml@gmx.de>
 
-cmake_minimum_required(VERSION 2.6...3.21)
+cmake_minimum_required(VERSION 2.6...3.31)
 project(expat)
 
-include(flags OPTIONAL)
 include(GNUInstallDirs)
+include(xpflags)
 if(DEFINED XP_NAMESPACE)
   set(XP_OPT_INSTALL EXCLUDE_FROM_ALL)
   set(nameSpace NAMESPACE ${XP_NAMESPACE}::)
