@@ -35,3 +35,7 @@ expat/**/*.sdf
 expat/**/*.VC.db
 expat/tests/**/Debug/
 expat/tests/**/Release/
+# externpro
+.env
+_bld*/
+docker-compose.override.yml

@@ -1,17 +1,10 @@
 # This file is copyrighted under the BSD-license for buildsystem files of KDE
 # copyright 2010, Patrick Spendrin <ps_ml@gmx.de>
 
-cmake_minimum_required(VERSION 2.6...3.31)
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
 project(expat)
 
-include(GNUInstallDirs)
-include(xpflags)
-if(DEFINED XP_NAMESPACE)
-  set(XP_OPT_INSTALL EXCLUDE_FROM_ALL)
-  set(nameSpace NAMESPACE ${XP_NAMESPACE}::)
-endif()
-if(NOT DEFINED XP_INSTALL_CMAKEDIR)
-  set(XP_INSTALL_CMAKEDIR ${CMAKE_INSTALL_DATADIR}/cmake)
+cmake_minimum_required(VERSION 2.6)
 endif()
 set(PACKAGE_BUGREPORT "expat-bugs@libexpat.org")
 set(PACKAGE_NAME "expat")
@@ -144,7 +137,6 @@ macro(expat_install)
     endif()
 endmacro()
 
-set(targetsFile ${PROJECT_NAME}-targets)
 expat_install(TARGETS expat EXPORT ${targetsFile} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
                       LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
                       ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
@@ -157,7 +149,9 @@ set(includedir "\${prefix}/include")
 configure_file(expat.pc.in ${CMAKE_CURRENT_BINARY_DIR}/expat.pc)
 
 expat_install(FILES lib/expat.h lib/expat_external.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-expat_install(FILES ${CMAKE_CURRENT_BINARY_DIR}/expat.pc ${XP_OPT_INSTALL} DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+if(XP_OPT_INSTALL)
+expat_install(FILES ${CMAKE_CURRENT_BINARY_DIR}/expat.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+endif()
 
 if(BUILD_tools)
     set(xmlwf_SRCS
@@ -170,10 +164,14 @@ if(BUILD_tools)
     add_executable(xmlwf ${xmlwf_SRCS})
     set_property(TARGET xmlwf PROPERTY RUNTIME_OUTPUT_DIRECTORY xmlwf)
     target_link_libraries(xmlwf expat)
-    expat_install(TARGETS xmlwf ${XP_OPT_INSTALL} DESTINATION ${CMAKE_INSTALL_BINDIR})
+    if(XP_OPT_INSTALL)
+    expat_install(TARGETS xmlwf DESTINATION ${CMAKE_INSTALL_BINDIR})
+    endif()
     if(BUILD_doc)
         add_custom_command(TARGET expat PRE_BUILD COMMAND "${DOCBOOK_TO_MAN}" "${PROJECT_SOURCE_DIR}/doc/xmlwf.xml" && mv "XMLWF.1" "${PROJECT_SOURCE_DIR}/doc/xmlwf.1")
-        expat_install(FILES "${PROJECT_SOURCE_DIR}/doc/xmlwf.1" ${XP_OPT_INSTALL} DESTINATION ${CMAKE_INSTALL_DATADIR}/man/man1)
+        if(XP_OPT_INSTALL)
+        expat_install(FILES "${PROJECT_SOURCE_DIR}/doc/xmlwf.1" DESTINATION ${CMAKE_INSTALL_DATADIR}/man/man1)
+        endif()
     endif()
 endif()
 
